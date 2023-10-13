@@ -1,5 +1,5 @@
-setwd("C:/Users/Jędrzej/Desktop/r")
-load("C:/Users/Jędrzej/Desktop/nlsy97.rdata")
+setwd("nlsy97.rdata")
+load("nlsy97.rdata")
 attach((nlsy97))
 hdegparent = pmax(hdegfath, hdegmoth)
 
