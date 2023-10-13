@@ -1,0 +1,41 @@
+setwd("C:/Users/Jędrzej/Desktop/r")
+load("C:/Users/Jędrzej/Desktop/nlsy97.rdata")
+attach((nlsy97))
+hdegparent = pmax(hdegfath, hdegmoth)
+
+newdata <- subset(nlsy97, hdegparent>0 & hdegree>-1 & ASVAB>0 & wagealt>0 & whours>0 & tenure2017>=0 & height2002>0 & weight2017>0 & health2017>0)
+detach(nlsy97)
+attach(newdata)
+hdegparent3 = pmax(hdegfath,hdegmoth)
+wagie = wagealt*whours
+bmi = weight2017/((height2002/100)^2)
+hdegree1 = hdegree+1
+ASVAB1 = ASVAB/1000
+NoneEducation <- ifelse(hdegree1=="1",1,0)
+GEDEducation <- ifelse(hdegree1=="2",1,0)
+HighschoolEducation <- ifelse(hdegree1=="3",1,0)
+AssociateEducation <- ifelse(hdegree1=="4",1,0)
+BachelorEducation <- ifelse(hdegree1=="5",1,0)
+MasterEducation <- ifelse(hdegree1=="6",1,0)
+PHDProfessionalEducation <- ifelse(hdegree1=="7",1,0)
+professional <- ifelse(hdegree1=="8",1,0)
+
+NoneEducationPar <- ifelse(hdegparent3=="1",1,0)
+GEDEducationPar <- ifelse(hdegparent3=="2",1,0)
+HighschoolEducationPar <- ifelse(hdegparent3=="3",1,0)
+AssociateEducationPar <- ifelse(hdegparent3=="4",1,0)
+BachelorEducationPar <- ifelse(hdegparent3=="5",1,0)
+MasterEducationPar <- ifelse(hdegparent3=="6",1,0)
+PHDProfessionalEducationPar <- ifelse(hdegparent3=="7",1,0)
+professional1 <- ifelse(hdegparent3=="8",1,0)
+
+LogWage = log(wagie, base = exp(1))
+ExcellentHealth <- ifelse(health2017=="1", 1, 0)
+VGoodHealth <- ifelse(health2017=="1", 1, 0)
+GoodHealth <- ifelse(health2017=="1", 1, 0)
+PoorHealth <- ifelse(health2017=="1", 1, 0)
+VPoorHealth <- ifelse(health2017=="1", 1, 0)
+reg = lm(LogWage~ NoneEducationPar+ GEDEducationPar+ HighschoolEducationPar+AssociateEducationPar+ BachelorEducationPar+ MasterEducationPar+PHDProfessionalEducationPar+NoneEducation+ GEDEducation+ HighschoolEducation+AssociateEducation +BachelorEducation+ MasterEducation + PHDProfessionalEducation + ASVAB1+ male+ female +black + hispanic + mixed+ white+ tenure2017 + ExcellentHealth + VGoodHealth + GoodHealth + PoorHealth +VPoorHealth )
+plot(hdegparent3, LogWage)
+summary(reg)
+
